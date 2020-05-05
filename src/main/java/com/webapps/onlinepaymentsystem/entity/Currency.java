@@ -7,6 +7,7 @@ package com.webapps.onlinepaymentsystem.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,10 +27,12 @@ public class Currency implements Serializable {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private String name;
 
     @NotNull
-    private String shortForm;
+    @Column(unique = true)
+    private String shortName;
 
     @NotNull
     private String symbol;
@@ -50,12 +53,12 @@ public class Currency implements Serializable {
         this.name = name;
     }
 
-    public String getShortForm() {
-        return shortForm;
+    public String getShortName() {
+        return shortName;
     }
 
-    public void setShortForm(String shortForm) {
-        this.shortForm = shortForm;
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
     public String getSymbol() {
@@ -71,7 +74,7 @@ public class Currency implements Serializable {
         int hash = 5;
         hash = 61 * hash + Objects.hashCode(this.id);
         hash = 61 * hash + Objects.hashCode(this.name);
-        hash = 61 * hash + Objects.hashCode(this.shortForm);
+        hash = 61 * hash + Objects.hashCode(this.shortName);
         hash = 61 * hash + Objects.hashCode(this.symbol);
         return hash;
     }
@@ -88,24 +91,21 @@ public class Currency implements Serializable {
             return false;
         }
         final Currency other = (Currency) obj;
-        if (!Objects.equals(this.name, other.name)) {
-            return false;
-        }
-        if (!Objects.equals(this.shortForm, other.shortForm)) {
-            return false;
-        }
-        if (!Objects.equals(this.symbol, other.symbol)) {
-            return false;
-        }
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        return true;
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.shortName, other.shortName)) {
+            return false;
+        }
+        return Objects.equals(this.symbol, other.symbol);
     }
 
     @Override
     public String toString() {
-        return "com.webapps.onlinepaymentsystem.entity.Currency{" + "id=" + id + ", name=" + name + ", shortForm=" + shortForm + ", symbol=" + symbol + '}';
+        return "com.webapps.onlinepaymentsystem.entity.Currency{" + "id=" + id + ", name=" + name + ", shortName=" + shortName + ", symbol=" + symbol + '}';
     }
 
 }

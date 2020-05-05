@@ -8,13 +8,13 @@ package com.webapps.onlinepaymentsystem.enums;
 /**
  *
  */
-public enum TriStateBoolean {
-    TRUE,
-    FALSE,
+public enum PaymentNotificationStatus {
+    ACCEPTED,
+    REJECTED,
     UNSET;
 
     @Override
     public String toString() {
-        return "com.webapps.onlinepaymentsystem.enums.TriStateBoolean{" + '}';
+        return "com.webapps.onlinepaymentsystem.enums.PaymentNotificationStatus{" + '}';
     }
 }

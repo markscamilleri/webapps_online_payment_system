@@ -5,7 +5,7 @@
  */
 package com.webapps.onlinepaymentsystem.entity;
 
-import com.webapps.onlinepaymentsystem.enums.TriStateBoolean;
+import com.webapps.onlinepaymentsystem.enums.PaymentNotificationStatus;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -34,18 +34,18 @@ public class PaymentNotification implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @NotNull
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @PastOrPresent
-    private Date txTimestamp;
+    private Date notificationTimestamp;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private User requestingUser;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private User payer;
 
     @NotNull
@@ -54,15 +54,15 @@ public class PaymentNotification implements Serializable {
     @NotNull
     @DecimalMin("0.00")
     private float amount;
-    
+
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Currency currency;
-    
+
     // TriState boolean, null means hasn't taken action yet.
     @NotNull
     @Enumerated(EnumType.ORDINAL)
-    private TriStateBoolean isAccepted;
+    private PaymentNotificationStatus status;
 
     public Long getId() {
         return id;
@@ -72,12 +72,12 @@ public class PaymentNotification implements Serializable {
         this.id = id;
     }
 
-    public Date getTimestamp() {
-        return txTimestamp;
+    public Date getNotificationTimestamp() {
+        return notificationTimestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.txTimestamp = timestamp;
+    public void setNotificationTimestamp(Date timestamp) {
+        this.notificationTimestamp = timestamp;
     }
 
     public User getRequestingUser() {
@@ -120,25 +120,25 @@ public class PaymentNotification implements Serializable {
         this.currency = currency;
     }
 
-    public TriStateBoolean isIsAccepted() {
-        return isAccepted;
+    public PaymentNotificationStatus getStatus() {
+        return status;
     }
 
-    public void setIsAccepted(TriStateBoolean isAccepted) {
-        this.isAccepted = isAccepted;
+    public void setStatus(PaymentNotificationStatus status) {
+        this.status = status;
     }
 
     @Override
     public int hashCode() {
         int hash = 7;
         hash = 67 * hash + Objects.hashCode(this.id);
-        hash = 67 * hash + Objects.hashCode(this.txTimestamp);
+        hash = 67 * hash + Objects.hashCode(this.notificationTimestamp);
         hash = 67 * hash + Objects.hashCode(this.requestingUser);
         hash = 67 * hash + Objects.hashCode(this.payer);
         hash = 67 * hash + Objects.hashCode(this.description);
         hash = 67 * hash + Float.floatToIntBits(this.amount);
         hash = 67 * hash + Objects.hashCode(this.currency);
-        hash = 67 * hash + Objects.hashCode(this.isAccepted);
+        hash = 67 * hash + Objects.hashCode(this.status);
         return hash;
     }
 
@@ -154,6 +154,10 @@ public class PaymentNotification implements Serializable {
             return false;
         }
         final PaymentNotification other = (PaymentNotification) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+
         if (Float.floatToIntBits(this.amount) != Float.floatToIntBits(other.amount)) {
             return false;
         }
@@ -165,10 +169,7 @@ public class PaymentNotification implements Serializable {
         if (!Objects.equals(this.description, other.description)) {
             return false;
         }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        if (!Objects.equals(this.txTimestamp, other.txTimestamp)) {
+        if (!Objects.equals(this.notificationTimestamp, other.notificationTimestamp)) {
             return false;
         }
         if (!Objects.equals(this.requestingUser, other.requestingUser)) {
@@ -177,15 +178,12 @@ public class PaymentNotification implements Serializable {
         if (!Objects.equals(this.payer, other.payer)) {
             return false;
         }
-        if (this.isAccepted != other.isAccepted) {
-            return false;
-        }
-        return true;
+        return this.status == other.status;
     }
 
     @Override
     public String toString() {
-        return "com.webapps.onlinepaymentsystem.entity.PaymentNotification{" + "id=" + id + ", timestamp=" + txTimestamp + ", requestingUser=" + requestingUser + ", payer=" + payer + ", description=" + description + ", amount=" + amount + ", currency=" + currency + ", isAccepted=" + isAccepted + '}';
+        return "com.webapps.onlinepaymentsystem.entity.PaymentNotification{" + "id=" + id + ", timestamp=" + notificationTimestamp + ", requestingUser=" + requestingUser + ", payer=" + payer + ", description=" + description + ", amount=" + amount + ", currency=" + currency + ", isAccepted=" + status + '}';
     }           
     
 }

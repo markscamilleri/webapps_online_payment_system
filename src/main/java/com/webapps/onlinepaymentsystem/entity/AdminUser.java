@@ -8,6 +8,7 @@ package com.webapps.onlinepaymentsystem.entity;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,7 +21,7 @@ import javax.validation.constraints.NotNull;
  *
  */
 @Entity
-public class Admin implements Serializable {
+public class AdminUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -29,13 +30,15 @@ public class Admin implements Serializable {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private String username;
 
     @NotNull
+    @Column(unique = true)
     private String email;
 
     @NotNull
-    private String passwordHash;
+    private String encryptedPassword;
 
     @NotNull
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -51,56 +54,6 @@ public class Admin implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 13;
-        hash = 61 * hash + Objects.hashCode(this.id);
-        hash = 61 * hash + Objects.hashCode(this.username);
-        hash = 61 * hash + Objects.hashCode(this.email);
-        hash = 61 * hash + Objects.hashCode(this.passwordHash);
-        hash = 61 * hash + Objects.hashCode(this.registrationTimestamp);
-        hash = 61 * hash + Objects.hashCode(this.lastLogin);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Admin other = (Admin) obj;
-        if (!Objects.equals(this.username, other.username)) {
-            return false;
-        }
-        if (!Objects.equals(this.email, other.email)) {
-            return false;
-        }
-        if (!Objects.equals(this.passwordHash, other.passwordHash)) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        if (!Objects.equals(this.registrationTimestamp, other.registrationTimestamp)) {
-            return false;
-        }
-        if (!Objects.equals(this.lastLogin, other.lastLogin)) {
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.webapps.onlinepaymentsystem.entity.Admins{" + "id=" + id + ", username=" + username + ", email=" + email + ", passwordHash=" + passwordHash + ", registrationTimestamp=" + registrationTimestamp + ", lastLogin=" + lastLogin + '}';
     }
 
     public String getUsername() {
@@ -119,12 +72,12 @@ public class Admin implements Serializable {
         this.email = email;
     }
 
-    public String getPasswordHash() {
-        return passwordHash;
+    public String getEncryptedPassword() {
+        return encryptedPassword;
     }
 
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
 
     public Date getRegistrationTimestamp() {
@@ -141,5 +94,52 @@ public class Admin implements Serializable {
 
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 13;
+        hash = 61 * hash + Objects.hashCode(this.id);
+        hash = 61 * hash + Objects.hashCode(this.username);
+        hash = 61 * hash + Objects.hashCode(this.email);
+        hash = 61 * hash + Objects.hashCode(this.encryptedPassword);
+        hash = 61 * hash + Objects.hashCode(this.registrationTimestamp);
+        hash = 61 * hash + Objects.hashCode(this.lastLogin);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AdminUser other = (AdminUser) obj;
+        if (!Objects.equals(this.username, other.username)) {
+            return false;
+        }
+        if (!Objects.equals(this.email, other.email)) {
+            return false;
+        }
+        if (!Objects.equals(this.encryptedPassword, other.encryptedPassword)) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        if (!Objects.equals(this.registrationTimestamp, other.registrationTimestamp)) {
+            return false;
+        }
+        return Objects.equals(this.lastLogin, other.lastLogin);
+    }
+
+    @Override
+    public String toString() {
+        return "com.webapps.onlinepaymentsystem.entity.Admins{" + "id=" + id + ", username=" + username + ", email=" + email + ", encryptedPassword=" + encryptedPassword + ", registrationTimestamp=" + registrationTimestamp + ", lastLogin=" + lastLogin + '}';
     }
 }

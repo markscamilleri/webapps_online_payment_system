@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,14 +36,16 @@ public class User implements Serializable {
     private Long id;
 
     @NotNull
+    @Column(unique = true)
     private String username;
 
     @NotNull
     @Email
+    @Column(unique = true)
     private String email;
 
     @NotNull
-    private String password;
+    private String encryptedPassword;
 
     @NotNull
     @DecimalMin("0.00")
@@ -64,13 +67,13 @@ public class User implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "fromUser")
     private List<Transaction> transactionsOut;
-    
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "toUser")
     private List<Transaction> transactionsIn;
-    
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestingUser")
     private List<PaymentNotification> notificationsSent;
-    
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "payer")
     private List<PaymentNotification> notificationsRecv;
 
@@ -98,12 +101,12 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
+    public String getEncryptedPassword() {
+        return encryptedPassword;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEncryptedPassword(String encryptedPassword) {
+        this.encryptedPassword = encryptedPassword;
     }
 
     public float getBalance() {
@@ -137,7 +140,7 @@ public class User implements Serializable {
     public void setLastLogin(Date lastLogin) {
         this.lastLogin = lastLogin;
     }
-    
+
     public List<Transaction> getTransactionsOut() {
         return transactionsOut;
     }
@@ -176,7 +179,7 @@ public class User implements Serializable {
         hash = 97 * hash + Objects.hashCode(this.id);
         hash = 97 * hash + Objects.hashCode(this.username);
         hash = 97 * hash + Objects.hashCode(this.email);
-        hash = 97 * hash + Objects.hashCode(this.password);
+        hash = 97 * hash + Objects.hashCode(this.encryptedPassword);
         hash = 97 * hash + Float.floatToIntBits(this.balance);
         hash = 97 * hash + Objects.hashCode(this.currency);
         hash = 97 * hash + Objects.hashCode(this.registrationTimestamp);
@@ -205,7 +208,7 @@ public class User implements Serializable {
         if (!Objects.equals(this.email, other.email)) {
             return false;
         }
-        if (!Objects.equals(this.password, other.password)) {
+        if (!Objects.equals(this.encryptedPassword, other.encryptedPassword)) {
             return false;
         }
         if (!Objects.equals(this.id, other.id)) {
@@ -225,7 +228,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return "com.webapps.onlinepaymentsystem.entity.User{" + "id=" + id + ", username=" + username + ", email=" + email + ", password=" + password + ", balance=" + balance + ", currency=" + currency + ", registrationTimestamp=" + registrationTimestamp + ", lastLogin=" + lastLogin + '}';
+        return "com.webapps.onlinepaymentsystem.entity.User{" + "id=" + id + ", username=" + username + ", email=" + email + ", encryptedPassword=" + encryptedPassword + ", balance=" + balance + ", currency=" + currency + ", registrationTimestamp=" + registrationTimestamp + ", lastLogin=" + lastLogin + '}';
     }
 
 }

@@ -36,11 +36,11 @@ public class Transaction implements Serializable {
     private Date timestamp;
     
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private User fromUser;
     
     @NotNull
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne
     private User toUser;
   
     @NotNull
@@ -51,7 +51,7 @@ public class Transaction implements Serializable {
     private float sendAmount;
    
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Currency sendCurrency;
    
     @NotNull
@@ -59,7 +59,7 @@ public class Transaction implements Serializable {
     private float recvAmount;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Currency recvCurrency;
     
     public Long getId() {
@@ -161,6 +161,9 @@ public class Transaction implements Serializable {
             return false;
         }
         final Transaction other = (Transaction) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
         if (Float.floatToIntBits(this.sendAmount) != Float.floatToIntBits(other.sendAmount)) {
             return false;
         }
@@ -168,9 +171,6 @@ public class Transaction implements Serializable {
             return false;
         }
         if (!Objects.equals(this.description, other.description)) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         if (!Objects.equals(this.timestamp, other.timestamp)) {
@@ -185,10 +185,7 @@ public class Transaction implements Serializable {
         if (!Objects.equals(this.sendCurrency, other.sendCurrency)) {
             return false;
         }
-        if (!Objects.equals(this.recvCurrency, other.recvCurrency)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.recvCurrency, other.recvCurrency);
     }
 
     @Override
