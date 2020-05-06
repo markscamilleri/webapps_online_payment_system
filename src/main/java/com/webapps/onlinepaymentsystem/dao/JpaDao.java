@@ -24,9 +24,9 @@ import javax.persistence.criteria.Root;
  * @param <S> The DTO class to use for input and output
  */
 public abstract class JpaDao<T extends Serializable, S extends Dto> implements Dao<S> {
-
+    
     private Class<T> entityClass;
-
+    
     @PersistenceContext
     EntityManager entityManager;
 
@@ -43,7 +43,7 @@ public abstract class JpaDao<T extends Serializable, S extends Dto> implements D
      * @return Entity version of the transfer object.
      */
     protected abstract T mapToRecord(S transferObject);
-
+    
     protected void setEntityClass(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
@@ -60,7 +60,7 @@ public abstract class JpaDao<T extends Serializable, S extends Dto> implements D
     protected <S> Stream<T> getByEqualsSingleParameter(final String parameterKey, final S parameterValue) {
         CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
-
+        
         Root<S> root = criteriaQuery.from(this.entityClass);
         criteriaQuery.where(
                 criteriaBuilder.equal(
@@ -68,10 +68,10 @@ public abstract class JpaDao<T extends Serializable, S extends Dto> implements D
                         criteriaBuilder.parameter(parameterValue.getClass(), parameterKey)
                 )
         );
-
+        
         TypedQuery<T> query = this.entityManager.createQuery(criteriaQuery);
         query.setParameter(parameterKey, parameterValue);
-
+        
         return query.getResultStream();
     }
 
@@ -85,25 +85,25 @@ public abstract class JpaDao<T extends Serializable, S extends Dto> implements D
     protected Optional<T> getRecordById(long id) {
         return Optional.ofNullable(entityManager.find(entityClass, id));
     }
-
+    
     @Override
     public Optional<S> getById(long id) {
         return this.getRecordById(id).map(this::mapToDto);
     }
-
+    
     @Override
     public List<S> getAll() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
-
+        
         criteriaQuery.from(entityClass);
-
+        
         return entityManager.createQuery(criteriaQuery)
                 .getResultStream()
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
-
+    
     @Override
     public void create(S record) {
         entityManager.persist(this.mapToRecord(record));
@@ -126,18 +126,18 @@ public abstract class JpaDao<T extends Serializable, S extends Dto> implements D
              * forgotten when merging and doesn't update values to null.
              */
             T newEntityRecord = this.mapToRecord(updatedRecord);
-            this.entityManager.merge(newEntityRecord);
+            return Optional.of(this.entityManager.merge(newEntityRecord)).map(this::mapToDto);
         }
 
         // Returns with updated values
-        return this.getById(updatedRecord.id);
+        return Optional.ofNullable(null);
     }
-
+    
     @Override
     public void delete(S record) {
         entityManager.remove(this.mapToRecord(record));
     }
-
+    
     @Override
     public void deleteById(long id) {
         Optional<T> record = getRecordById(id);
