@@ -7,17 +7,16 @@ package com.webapps.onlinepaymentsystem.entity;
 
 import com.webapps.onlinepaymentsystem.enums.PaymentNotificationStatus;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PastOrPresent;
@@ -36,9 +35,9 @@ public class PaymentNotification implements Serializable {
     private Long id;
 
     @NotNull
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Column(columnDefinition = "TIMESTAMP")
     @PastOrPresent
-    private Date notificationTimestamp;
+    private LocalDateTime notificationTimestamp;
 
     @NotNull
     @ManyToOne
@@ -72,11 +71,11 @@ public class PaymentNotification implements Serializable {
         this.id = id;
     }
 
-    public Date getNotificationTimestamp() {
+    public LocalDateTime getNotificationTimestamp() {
         return notificationTimestamp;
     }
 
-    public void setNotificationTimestamp(Date timestamp) {
+    public void setNotificationTimestamp(LocalDateTime timestamp) {
         this.notificationTimestamp = timestamp;
     }
 

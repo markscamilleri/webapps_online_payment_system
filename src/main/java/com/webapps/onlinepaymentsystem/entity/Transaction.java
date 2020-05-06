@@ -6,8 +6,9 @@
 package com.webapps.onlinepaymentsystem.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -32,8 +33,8 @@ public class Transaction implements Serializable {
     private Long id;
     
     @NotNull
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date timestamp;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime txTimestamp;
     
     @NotNull
     @ManyToOne
@@ -70,12 +71,12 @@ public class Transaction implements Serializable {
         this.id = id;
     }
 
-    public Date getTimestamp() {
-        return timestamp;
+    public LocalDateTime getTxTimestamp() {
+        return txTimestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setTxTimestamp(LocalDateTime txTimestamp) {
+        this.txTimestamp = txTimestamp;
     }
 
     public User getFromUser() {
@@ -138,7 +139,7 @@ public class Transaction implements Serializable {
     public int hashCode() {
         int hash = 5;
         hash = 13 * hash + Objects.hashCode(this.id);
-        hash = 13 * hash + Objects.hashCode(this.timestamp);
+        hash = 13 * hash + Objects.hashCode(this.txTimestamp);
         hash = 13 * hash + Objects.hashCode(this.fromUser);
         hash = 13 * hash + Objects.hashCode(this.toUser);
         hash = 13 * hash + Objects.hashCode(this.description);
@@ -173,7 +174,7 @@ public class Transaction implements Serializable {
         if (!Objects.equals(this.description, other.description)) {
             return false;
         }
-        if (!Objects.equals(this.timestamp, other.timestamp)) {
+        if (!Objects.equals(this.txTimestamp, other.txTimestamp)) {
             return false;
         }
         if (!Objects.equals(this.fromUser, other.fromUser)) {
@@ -190,7 +191,7 @@ public class Transaction implements Serializable {
 
     @Override
     public String toString() {
-        return "com.webapps.onlinepaymentsystem.entity.Transaction{" + "id=" + id + ", timestamp=" + timestamp + ", fromUser=" + fromUser + ", toUser=" + toUser + ", description=" + description + ", sendAmount=" + sendAmount + ", sendCurrency=" + sendCurrency + ", recvAmount=" + recvAmount + ", recvCurrency=" + recvCurrency + '}';
+        return "com.webapps.onlinepaymentsystem.entity.Transaction{" + "id=" + id + ", timestamp=" + txTimestamp + ", fromUser=" + fromUser + ", toUser=" + toUser + ", description=" + description + ", sendAmount=" + sendAmount + ", sendCurrency=" + sendCurrency + ", recvAmount=" + recvAmount + ", recvCurrency=" + recvCurrency + '}';
     }
 
     

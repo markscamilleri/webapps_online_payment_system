@@ -5,9 +5,12 @@
  */
 package com.webapps.onlinepaymentsystem.dao;
 
+import com.webapps.onlinepaymentsystem.dto.Dto;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -17,20 +20,44 @@ import javax.persistence.criteria.Root;
 
 /**
  *
- * @author marks
+ * @param <T> The JPA entity class this uses
+ * @param <S> The DTO class to use for input and output
  */
-public abstract class JpaDao<T extends Serializable> {
+public abstract class JpaDao<T extends Serializable, S extends Dto> implements Dao<S> {
 
     private Class<T> entityClass;
 
     @PersistenceContext
     EntityManager entityManager;
 
+    /**
+     *
+     * @param record The entity to map to a DTO
+     * @return The DTO with the data copied from the record
+     */
+    protected abstract S mapToDto(T record);
+
+    /**
+     *
+     * @param transferObject The DTO to map to an entity
+     * @return Entity version of the transfer object.
+     */
+    protected abstract T mapToRecord(S transferObject);
+
     protected void setEntityClass(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
-    protected <S> Optional<T> getByEqualsSingleParameter(final String parameterKey, final S parameterValue) {
+    /**
+     * Searches for a record that matches the given parameter. Uses an equality
+     * comparison
+     *
+     * @param <S> The Java Class type of the parameter
+     * @param parameterKey The column/attribute to compare
+     * @param parameterValue The value to compare it to
+     * @return Optionally the entity record object matching this parameter.
+     */
+    protected <S> Stream<T> getByEqualsSingleParameter(final String parameterKey, final S parameterValue) {
         CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
 
@@ -45,37 +72,75 @@ public abstract class JpaDao<T extends Serializable> {
         TypedQuery<T> query = this.entityManager.createQuery(criteriaQuery);
         query.setParameter(parameterKey, parameterValue);
 
-        // getSingleResult would otherwise throw an exception if there's no results
-        return query.getResultStream().findFirst();
+        return query.getResultStream();
     }
 
-    public Optional<T> getById(long id) {
+    /**
+     * Specifically gets the entity record by ID, useful for operations such as
+     * {@link #deleteById(long) deleteById}
+     *
+     * @param id The record's id
+     * @return Optionally the record
+     */
+    protected Optional<T> getRecordById(long id) {
         return Optional.ofNullable(entityManager.find(entityClass, id));
     }
 
-    public List<T> getAll() {
+    @Override
+    public Optional<S> getById(long id) {
+        return this.getRecordById(id).map(this::mapToDto);
+    }
+
+    @Override
+    public List<S> getAll() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
 
         criteriaQuery.from(entityClass);
 
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return entityManager.createQuery(criteriaQuery)
+                .getResultStream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
-    public void create(T record) {
-        entityManager.persist(record);
+    @Override
+    public void create(S record) {
+        entityManager.persist(this.mapToRecord(record));
     }
 
-    public T update(T updatedRecord) {
-        return entityManager.merge(updatedRecord);
+    /**
+     * Updates the record if, and only if, a mapping from the DTO to a record is
+     * found
+     *
+     * @param updatedRecord DTO representing the record after the update.
+     * @return Optional DTO representing the record after the update if there
+     * was a record to update.
+     */
+    @Override
+    public Optional<S> update(S updatedRecord) {
+        Optional<T> entityRecord = this.getRecordById(updatedRecord.id);
+        if (entityRecord.isPresent()) {
+            /*
+             * Creating a new record makes JPA assume "null" values are 
+             * forgotten when merging and doesn't update values to null.
+             */
+            T newEntityRecord = this.mapToRecord(updatedRecord);
+            this.entityManager.merge(newEntityRecord);
+        }
+
+        // Returns with updated values
+        return this.getById(updatedRecord.id);
     }
 
-    public void delete(T record) {
-        entityManager.remove(record);
+    @Override
+    public void delete(S record) {
+        entityManager.remove(this.mapToRecord(record));
     }
 
+    @Override
     public void deleteById(long id) {
-        Optional<T> record = getById(id);
+        Optional<T> record = getRecordById(id);
         record.ifPresent(this::delete);
     }
 }

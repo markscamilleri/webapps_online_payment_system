@@ -5,14 +5,20 @@
  */
 package com.webapps.onlinepaymentsystem.dao;
 
-import com.webapps.onlinepaymentsystem.entity.Transaction;
-import com.webapps.onlinepaymentsystem.entity.User;
+import com.webapps.onlinepaymentsystem.dto.TransactionDto;
+import com.webapps.onlinepaymentsystem.enums.TimeCondition;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
  * @author marks
  */
-public interface TransactionDao extends Dao<Transaction> {
-    // see if getByUser is also there by default from UserDao
+public interface TransactionDao extends Dao<TransactionDto> {
+    List<TransactionDto> getByTimestamp(LocalDateTime timestmap, TimeCondition when);
+
+    Optional<List<TransactionDto>> getBySenderId(long id);
+    
+    Optional<List<TransactionDto>> getByReceiverId(long id);
 }

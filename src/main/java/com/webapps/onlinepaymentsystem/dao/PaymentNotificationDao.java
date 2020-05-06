@@ -5,20 +5,23 @@
  */
 package com.webapps.onlinepaymentsystem.dao;
 
-import com.webapps.onlinepaymentsystem.entity.PaymentNotification;
-import com.webapps.onlinepaymentsystem.entity.User;
+import com.webapps.onlinepaymentsystem.dto.PaymentNotificationDto;
 import com.webapps.onlinepaymentsystem.enums.PaymentNotificationStatus;
 import com.webapps.onlinepaymentsystem.enums.TimeCondition;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
- *
+ * PaymentNotificationDto
  */
-public interface PaymentNotificationDao extends Dao<PaymentNotification> {
+public interface PaymentNotificationDao extends Dao<PaymentNotificationDto> {
 
-    List<PaymentNotification> getByTimestamp(Date timestmap, TimeCondition when);
+    List<PaymentNotificationDto> getByTimestamp(LocalDateTime timestmap, TimeCondition when);
     
-    List<PaymentNotification> getByStatus(PaymentNotificationStatus status);
-        
+    List<PaymentNotificationDto> getByStatus(PaymentNotificationStatus status);
+    
+    Optional<List<PaymentNotificationDto>> getByRequestingUserId(long id);
+    
+    Optional<List<PaymentNotificationDto>> getByPayerId(long id);
 }

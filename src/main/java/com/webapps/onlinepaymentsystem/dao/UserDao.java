@@ -5,16 +5,16 @@
  */
 package com.webapps.onlinepaymentsystem.dao;
 
-import com.webapps.onlinepaymentsystem.entity.User;
+import com.webapps.onlinepaymentsystem.dto.UserDto;
 import java.util.Optional;
 
 /**
  *
  * @author marks
  */
-public interface UserDao extends Dao<User> {
+public interface UserDao extends Dao<UserDto> {
 
-    Optional<User> getByUsername(String username);
+    Optional<UserDto> getByUsername(String username);
 
-    Optional<User> getByEmail(String email);
+    Optional<UserDto> getByEmail(String email);
 }

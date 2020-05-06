@@ -5,14 +5,15 @@
  */
 package com.webapps.onlinepaymentsystem.dao;
 
+import com.webapps.onlinepaymentsystem.dto.CurrencyDto;
 import com.webapps.onlinepaymentsystem.entity.Currency;
 import java.util.Optional;
 
 /**
  *
  */
-public interface CurrencyDao extends Dao<Currency>{
-    Optional<Currency> getByshortName(String shortName);
+public interface CurrencyDao extends Dao<CurrencyDto>{
+    Optional<CurrencyDto> getByshortName(String shortName);
     
-    Optional<Currency> getByName(String name);
+    Optional<CurrencyDto> getByName(String name);
 }

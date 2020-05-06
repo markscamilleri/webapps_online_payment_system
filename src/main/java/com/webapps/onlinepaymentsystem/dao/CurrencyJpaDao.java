@@ -5,6 +5,7 @@
  */
 package com.webapps.onlinepaymentsystem.dao;
 
+import com.webapps.onlinepaymentsystem.dto.CurrencyDto;
 import com.webapps.onlinepaymentsystem.entity.Currency;
 import java.util.Optional;
 
@@ -12,16 +13,44 @@ import java.util.Optional;
  *
  * @author marks
  */
-public class CurrencyJpaDao extends JpaDao<Currency> implements CurrencyDao {
+public class CurrencyJpaDao extends JpaDao<Currency, CurrencyDto> implements CurrencyDao {
 
     @Override
-    public Optional<Currency> getByshortName(String shortName) {
-        return this.getByEqualsSingleParameter("shortName", shortName);
+    public Optional<CurrencyDto> getByshortName(String shortName) {
+        // This should only get one reesult since shortName is unique
+        return this.getByEqualsSingleParameter("shortName", shortName)
+                .map(this::mapToDto)
+                .findFirst();
     }
 
     @Override
-    public Optional<Currency> getByName(String name) {
-        return this.getByEqualsSingleParameter("name", name);
+    public Optional<CurrencyDto> getByName(String name) {
+        // This should only get one reesult since name is unique
+        return this.getByEqualsSingleParameter("name", name)
+                .map(this::mapToDto)
+                .findFirst();
     }
-    
+
+    @Override
+    protected CurrencyDto mapToDto(Currency record) {
+        CurrencyDto dto = new CurrencyDto();
+        dto.id = record.getId();
+        dto.name = record.getName();
+        dto.shortName = record.getShortName();
+        dto.symbol = record.getSymbol();
+        
+        return dto;
+    }
+
+    @Override
+    protected Currency mapToRecord(CurrencyDto transferObject) {
+        Currency entityRecord = new Currency();
+        
+        entityRecord.setId(transferObject.id);
+        entityRecord.setName(transferObject.name);
+        entityRecord.setShortName(transferObject.shortName);
+        entityRecord.setSymbol(transferObject.symbol);
+        
+        return entityRecord;
+    }
 }

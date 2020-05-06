@@ -5,18 +5,14 @@
  */
 package com.webapps.onlinepaymentsystem.dto;
 
-import java.time.LocalDateTime;
-
+import java.io.Serializable;
 
 /**
  *
  * @author marks
  */
-public class AdminUserDto extends Dto {
-    public String username;
-    public String email;
-    public String encryptedPassword;
-    public LocalDateTime registrationTimestamp;
-    public LocalDateTime lastLogin;
-
+public abstract class Dto implements Serializable {
+    
+    public Long id;
+    
 }

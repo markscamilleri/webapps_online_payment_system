@@ -9,8 +9,7 @@ package com.webapps.onlinepaymentsystem.dto;
  *
  * @author marks
  */
-public class CurrencyDto {
-    public Long id;
+public class CurrencyDto extends Dto {
     public String name;
     public String shortName;
     public String symbol;

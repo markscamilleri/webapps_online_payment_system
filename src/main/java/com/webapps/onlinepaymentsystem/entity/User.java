@@ -6,7 +6,7 @@
 package com.webapps.onlinepaymentsystem.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -56,14 +56,14 @@ public class User implements Serializable {
     private Currency currency;
 
     @NotNull
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Column(columnDefinition = "TIMESTAMP")
     @PastOrPresent
-    private Date registrationTimestamp;
+    private LocalDateTime registrationTimestamp;
 
     @NotNull
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Column(columnDefinition = "TIMESTAMP")
     @PastOrPresent
-    private Date lastLogin;
+    private LocalDateTime lastLogin;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "fromUser")
     private List<Transaction> transactionsOut;
@@ -125,19 +125,19 @@ public class User implements Serializable {
         this.currency = currency;
     }
 
-    public Date getRegistrationTimestamp() {
+    public LocalDateTime getRegistrationTimestamp() {
         return registrationTimestamp;
     }
 
-    public void setRegistrationTimestamp(Date registrationTimestamp) {
+    public void setRegistrationTimestamp(LocalDateTime registrationTimestamp) {
         this.registrationTimestamp = registrationTimestamp;
     }
 
-    public Date getLastLogin() {
+    public LocalDateTime getLastLogin() {
         return lastLogin;
     }
 
-    public void setLastLogin(Date lastLogin) {
+    public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
     }
 

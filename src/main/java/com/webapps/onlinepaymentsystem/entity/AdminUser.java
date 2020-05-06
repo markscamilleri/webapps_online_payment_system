@@ -6,14 +6,13 @@
 package com.webapps.onlinepaymentsystem.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -41,12 +40,12 @@ public class AdminUser implements Serializable {
     private String encryptedPassword;
 
     @NotNull
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date registrationTimestamp;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime registrationTimestamp;
 
     @NotNull
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    private Date lastLogin;
+    @Column(columnDefinition = "TIMESTAMP")
+    private LocalDateTime lastLogin;
 
     public Long getId() {
         return id;
@@ -80,19 +79,19 @@ public class AdminUser implements Serializable {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public Date getRegistrationTimestamp() {
+    public LocalDateTime getRegistrationTimestamp() {
         return registrationTimestamp;
     }
 
-    public void setRegistrationTimestamp(Date registrationTimestamp) {
+    public void setRegistrationTimestamp(LocalDateTime registrationTimestamp) {
         this.registrationTimestamp = registrationTimestamp;
     }
 
-    public Date getLastLogin() {
+    public LocalDateTime getLastLogin() {
         return lastLogin;
     }
 
-    public void setLastLogin(Date lastLogin) {
+    public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
     }
     

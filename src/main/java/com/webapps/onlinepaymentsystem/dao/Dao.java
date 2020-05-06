@@ -5,22 +5,25 @@
  */
 package com.webapps.onlinepaymentsystem.dao;
 
+import com.webapps.onlinepaymentsystem.dto.Dto;
 import java.util.List;
 import java.util.Optional;
 
 /**
  *
+ * @param <T> The Data Transfer Object type
  */
-public interface Dao<T> {
+public interface Dao<T extends Dto> {
     Optional<T> getById(long id);
     
-    List< T> getAll();
+    List<T> getAll();
 
     void create(T record);
 
-    T update(T updatedRecord);
+    Optional<T> update(T updatedRecord);
     
     void delete(T record);
 
     void deleteById(long id);
+    
 }
