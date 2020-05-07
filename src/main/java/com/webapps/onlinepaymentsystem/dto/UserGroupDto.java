@@ -5,18 +5,10 @@
  */
 package com.webapps.onlinepaymentsystem.dto;
 
-import java.time.LocalDateTime;
-
-
 /**
  *
  * @author marks
  */
-public class AdminUserDto extends Dto {
-    public String username;
-    public String email;
-    public String encryptedPassword;
-    public LocalDateTime registrationTimestamp;
-    public LocalDateTime lastLogin;
-
+public class UserGroupDto extends Dto{
+    public String name;
 }

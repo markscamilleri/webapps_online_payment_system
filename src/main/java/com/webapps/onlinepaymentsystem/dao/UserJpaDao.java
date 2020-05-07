@@ -23,8 +23,6 @@ public class UserJpaDao extends JpaDao<User, UserDto> implements UserDao {
         transferObject.username = record.getUsername();
         transferObject.email = record.getEmail();
         transferObject.encryptedPassword = record.getEncryptedPassword();
-        transferObject.balance = record.getBalance();
-        transferObject.currency = cDao.mapToDto(record.getCurrency());
         transferObject.lastLogin = record.getLastLogin();
         transferObject.registrationTimestamp = record.getRegistrationTimestamp();
 
@@ -41,8 +39,6 @@ public class UserJpaDao extends JpaDao<User, UserDto> implements UserDao {
         userRecord.setUsername(transferObject.username);
         userRecord.setEmail(transferObject.email);
         userRecord.setEncryptedPassword(transferObject.encryptedPassword);
-        userRecord.setBalance(transferObject.balance);
-        userRecord.setCurrency(cDao.mapToRecord(transferObject.currency));
         userRecord.setLastLogin(transferObject.lastLogin);
         userRecord.setRegistrationTimestamp(transferObject.registrationTimestamp);
 

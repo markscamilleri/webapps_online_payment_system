@@ -10,12 +10,10 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
@@ -38,11 +36,11 @@ public class Transaction implements Serializable {
     
     @NotNull
     @ManyToOne
-    private User fromUser;
+    private SystemUser fromUser;
     
     @NotNull
     @ManyToOne
-    private User toUser;
+    private SystemUser toUser;
   
     @NotNull
     private String description;
@@ -79,19 +77,19 @@ public class Transaction implements Serializable {
         this.txTimestamp = txTimestamp;
     }
 
-    public User getFromUser() {
+    public SystemUser getFromUser() {
         return fromUser;
     }
 
-    public void setFromUser(User fromUser) {
+    public void setFromUser(SystemUser fromUser) {
         this.fromUser = fromUser;
     }
 
-    public User getToUser() {
+    public SystemUser getToUser() {
         return toUser;
     }
 
-    public void setToUser(User toUser) {
+    public void setToUser(SystemUser toUser) {
         this.toUser = toUser;
     }
 

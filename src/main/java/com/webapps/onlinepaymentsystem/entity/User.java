@@ -7,21 +7,14 @@ package com.webapps.onlinepaymentsystem.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Temporal;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
 
 /**
  *
@@ -31,6 +24,7 @@ import javax.validation.constraints.PastOrPresent;
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -40,42 +34,23 @@ public class User implements Serializable {
     private String username;
 
     @NotNull
-    @Email
     @Column(unique = true)
     private String email;
 
     @NotNull
     private String encryptedPassword;
-
-    @NotNull
-    @DecimalMin("0.00")
-    private float balance;
-
+    
     @NotNull
     @ManyToOne
-    private Currency currency;
+    private UserGroup userGroup;
 
     @NotNull
     @Column(columnDefinition = "TIMESTAMP")
-    @PastOrPresent
     private LocalDateTime registrationTimestamp;
 
     @NotNull
     @Column(columnDefinition = "TIMESTAMP")
-    @PastOrPresent
     private LocalDateTime lastLogin;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "fromUser")
-    private List<Transaction> transactionsOut;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "toUser")
-    private List<Transaction> transactionsIn;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestingUser")
-    private List<PaymentNotification> notificationsSent;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "payer")
-    private List<PaymentNotification> notificationsRecv;
 
     public Long getId() {
         return id;
@@ -109,22 +84,6 @@ public class User implements Serializable {
         this.encryptedPassword = encryptedPassword;
     }
 
-    public float getBalance() {
-        return balance;
-    }
-
-    public void setBalance(float balance) {
-        this.balance = balance;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(Currency currency) {
-        this.currency = currency;
-    }
-
     public LocalDateTime getRegistrationTimestamp() {
         return registrationTimestamp;
     }
@@ -140,50 +99,16 @@ public class User implements Serializable {
     public void setLastLogin(LocalDateTime lastLogin) {
         this.lastLogin = lastLogin;
     }
-
-    public List<Transaction> getTransactionsOut() {
-        return transactionsOut;
-    }
-
-    public void setTransactionsOut(List<Transaction> transactionsOut) {
-        this.transactionsOut = transactionsOut;
-    }
-
-    public List<Transaction> getTransactionsIn() {
-        return transactionsIn;
-    }
-
-    public void setTransactionsIn(List<Transaction> transactionsIn) {
-        this.transactionsIn = transactionsIn;
-    }
-
-    public List<PaymentNotification> getNotificationsSent() {
-        return notificationsSent;
-    }
-
-    public void setNotificationsSent(List<PaymentNotification> notificationsSent) {
-        this.notificationsSent = notificationsSent;
-    }
-
-    public List<PaymentNotification> getNotificationsRecv() {
-        return notificationsRecv;
-    }
-
-    public void setNotificationsRecv(List<PaymentNotification> notificationsRecv) {
-        this.notificationsRecv = notificationsRecv;
-    }
-
+    
     @Override
     public int hashCode() {
-        int hash = 3;
-        hash = 97 * hash + Objects.hashCode(this.id);
-        hash = 97 * hash + Objects.hashCode(this.username);
-        hash = 97 * hash + Objects.hashCode(this.email);
-        hash = 97 * hash + Objects.hashCode(this.encryptedPassword);
-        hash = 97 * hash + Float.floatToIntBits(this.balance);
-        hash = 97 * hash + Objects.hashCode(this.currency);
-        hash = 97 * hash + Objects.hashCode(this.registrationTimestamp);
-        hash = 97 * hash + Objects.hashCode(this.lastLogin);
+        int hash = 13;
+        hash = 61 * hash + Objects.hashCode(this.id);
+        hash = 61 * hash + Objects.hashCode(this.username);
+        hash = 61 * hash + Objects.hashCode(this.email);
+        hash = 61 * hash + Objects.hashCode(this.encryptedPassword);
+        hash = 61 * hash + Objects.hashCode(this.registrationTimestamp);
+        hash = 61 * hash + Objects.hashCode(this.lastLogin);
         return hash;
     }
 
@@ -199,9 +124,6 @@ public class User implements Serializable {
             return false;
         }
         final User other = (User) obj;
-        if (Float.floatToIntBits(this.balance) != Float.floatToIntBits(other.balance)) {
-            return false;
-        }
         if (!Objects.equals(this.username, other.username)) {
             return false;
         }
@@ -214,21 +136,14 @@ public class User implements Serializable {
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }
-        if (!Objects.equals(this.currency, other.currency)) {
-            return false;
-        }
         if (!Objects.equals(this.registrationTimestamp, other.registrationTimestamp)) {
             return false;
         }
-        if (!Objects.equals(this.lastLogin, other.lastLogin)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.lastLogin, other.lastLogin);
     }
 
     @Override
     public String toString() {
-        return "com.webapps.onlinepaymentsystem.entity.User{" + "id=" + id + ", username=" + username + ", email=" + email + ", encryptedPassword=" + encryptedPassword + ", balance=" + balance + ", currency=" + currency + ", registrationTimestamp=" + registrationTimestamp + ", lastLogin=" + lastLogin + '}';
+        return "com.webapps.onlinepaymentsystem.entity.Admins{" + "id=" + id + ", username=" + username + ", email=" + email + ", encryptedPassword=" + encryptedPassword + ", registrationTimestamp=" + registrationTimestamp + ", lastLogin=" + lastLogin + '}';
     }
-
 }

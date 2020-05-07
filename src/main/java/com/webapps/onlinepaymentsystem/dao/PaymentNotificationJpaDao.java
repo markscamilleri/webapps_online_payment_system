@@ -7,7 +7,7 @@ package com.webapps.onlinepaymentsystem.dao;
 
 import com.webapps.onlinepaymentsystem.dto.PaymentNotificationDto;
 import com.webapps.onlinepaymentsystem.entity.PaymentNotification;
-import com.webapps.onlinepaymentsystem.entity.User;
+import com.webapps.onlinepaymentsystem.entity.SystemUser;
 import com.webapps.onlinepaymentsystem.enums.PaymentNotificationStatus;
 import com.webapps.onlinepaymentsystem.enums.TimeCondition;
 import java.time.LocalDateTime;
@@ -30,12 +30,12 @@ public class PaymentNotificationJpaDao extends JpaDao<PaymentNotification, Payme
     protected PaymentNotificationDto mapToDto(PaymentNotification record) {
         PaymentNotificationDto transferObject = new PaymentNotificationDto();
 
-        UserJpaDao uDao = new UserJpaDao();
+        SystemUserJpaDao sysUserDao = new SystemUserJpaDao();
         CurrencyJpaDao cDao = new CurrencyJpaDao();
 
         transferObject.id = record.getId();
-        transferObject.requestingUser = uDao.mapToDto(record.getRequestingUser());
-        transferObject.payer = uDao.mapToDto(record.getPayer());
+        transferObject.requestingUser = sysUserDao.mapToDto(record.getRequestingUser());
+        transferObject.payer = sysUserDao.mapToDto(record.getPayer());
         transferObject.amount = record.getAmount();
         transferObject.currency = cDao.mapToDto(record.getCurrency());
         transferObject.description = record.getDescription();
@@ -110,14 +110,14 @@ public class PaymentNotificationJpaDao extends JpaDao<PaymentNotification, Payme
     }
 
     /**
-     * @param id User entity record id
+     * @param id SystemUser entity record id
      * @return Optionally the payment requests this user made if the user exists
      * exists.
      */
     @Override
     public Optional<List<PaymentNotificationDto>> getByRequestingUserId(long id) {
         JpaDao uDao = new UserJpaDao();
-        Optional<User> user = uDao.getRecordById(id);
+        Optional<SystemUser> user = uDao.getRecordById(id);
 
         return user.map(
                 presentUser -> presentUser.getNotificationsSent()
@@ -129,13 +129,13 @@ public class PaymentNotificationJpaDao extends JpaDao<PaymentNotification, Payme
 
     /**
      * 
-     * @param id User entity record id
+     * @param id SystemUser entity record id
      * @return Optionally the payment requests this user received if the user exists
      */
     @Override
     public Optional<List<PaymentNotificationDto>> getByPayerId(long id) {
         JpaDao uDao = new UserJpaDao();
-        Optional<User> user = uDao.getRecordById(id);
+        Optional<SystemUser> user = uDao.getRecordById(id);
 
         return user.map(
                 presentUser -> presentUser.getNotificationsRecv()

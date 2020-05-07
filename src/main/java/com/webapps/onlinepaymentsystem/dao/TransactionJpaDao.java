@@ -7,7 +7,7 @@ package com.webapps.onlinepaymentsystem.dao;
 
 import com.webapps.onlinepaymentsystem.dto.TransactionDto;
 import com.webapps.onlinepaymentsystem.entity.Transaction;
-import com.webapps.onlinepaymentsystem.entity.User;
+import com.webapps.onlinepaymentsystem.entity.SystemUser;
 import com.webapps.onlinepaymentsystem.enums.TimeCondition;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,14 +28,14 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
     protected TransactionDto mapToDto(Transaction record) {
         TransactionDto transferObject = new TransactionDto();
 
-        UserJpaDao uDao = new UserJpaDao();
+        SystemUserJpaDao sysUserDao = new SystemUserJpaDao();
         CurrencyJpaDao cDao = new CurrencyJpaDao();
 
         transferObject.id = record.getId();
         transferObject.description = record.getDescription();
         transferObject.timestamp = record.getTxTimestamp();
-        transferObject.fromUser = uDao.mapToDto(record.getFromUser());
-        transferObject.toUser = uDao.mapToDto(record.getToUser());
+        transferObject.fromUser = sysUserDao.mapToDto(record.getFromUser());
+        transferObject.toUser = sysUserDao.mapToDto(record.getToUser());
         transferObject.sendAmount = record.getSendAmount();
         transferObject.sendCurrency = cDao.mapToDto(record.getSendCurrency());
         transferObject.recvAmount = record.getRecvAmount();
@@ -51,14 +51,14 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
     protected Transaction mapToRecord(TransactionDto transferObject) {
         Transaction record = new Transaction();
 
-        UserJpaDao uDao = new UserJpaDao();
+        SystemUserJpaDao sysUserDao = new SystemUserJpaDao();
         CurrencyJpaDao cDao = new CurrencyJpaDao();
 
         record.setId(transferObject.id);
         record.setDescription(transferObject.description);
         record.setTxTimestamp(transferObject.timestamp);
-        record.setFromUser(uDao.getRecordById(transferObject.fromUser.id).orElse(null));
-        record.setToUser(uDao.getRecordById(transferObject.toUser.id).orElse(null));
+        record.setFromUser(sysUserDao.getRecordById(transferObject.fromUser.id).orElse(null));
+        record.setToUser(sysUserDao.getRecordById(transferObject.toUser.id).orElse(null));
         record.setSendAmount(transferObject.sendAmount);
         record.setSendCurrency(cDao.getRecordById(transferObject.sendCurrency.id).orElse(null));
         record.setRecvAmount(transferObject.recvAmount);
@@ -122,7 +122,7 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
     @Override
     public Optional<List<TransactionDto>> getBySenderId(long id) {
         JpaDao uDao = new UserJpaDao();
-        Optional<User> user = uDao.getRecordById(id);
+        Optional<SystemUser> user = uDao.getRecordById(id);
 
         return user.map(
                 presentUser -> presentUser.getTransactionsOut()
@@ -135,7 +135,7 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
     @Override
     public Optional<List<TransactionDto>> getByReceiverId(long id) {
         JpaDao uDao = new UserJpaDao();
-        Optional<User> user = uDao.getRecordById(id);
+        Optional<SystemUser> user = uDao.getRecordById(id);
 
         return user.map(
                 presentUser -> presentUser.getTransactionsIn()
