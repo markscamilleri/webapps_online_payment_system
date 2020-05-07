@@ -94,7 +94,7 @@ public abstract class JpaDao<T extends Serializable, S extends Dto> implements D
     @Override
     public List<S> getAll() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
+        CriteriaQuery<T> criteriaQuery = criteriaBuilder.createQuery(entityClass);
         
         criteriaQuery.from(entityClass);
         
@@ -141,6 +141,6 @@ public abstract class JpaDao<T extends Serializable, S extends Dto> implements D
     @Override
     public void deleteById(long id) {
         Optional<T> record = getRecordById(id);
-        record.ifPresent(this::delete);
+        entityManager.remove(record);
     }
 }

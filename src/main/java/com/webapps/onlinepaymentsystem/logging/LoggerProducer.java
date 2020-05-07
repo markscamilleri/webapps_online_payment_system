@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  */
 @Named
 @Singleton
-public class Logger {
+public class LoggerProducer {
 
     @Produces
     public Logger produceLogger(InjectionPoint injectionPoint) {
