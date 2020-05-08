@@ -14,6 +14,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.inject.Named;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -24,20 +27,25 @@ import javax.persistence.criteria.Root;
  *
  * @author marks
  */
+@Stateless
+@Named("PaymentNotificationsDao")
 public class PaymentNotificationJpaDao extends JpaDao<PaymentNotification, PaymentNotificationDto> implements PaymentNotificationDao {
+
+    @EJB(name = "CurrencyDao")
+    private CurrencyJpaDao currencyJpaDao;
+
+    @EJB(name = "CustomerUserDao")
+    private CustomerUserJpaDao customerJpaDao;
 
     @Override
     protected PaymentNotificationDto mapToDto(PaymentNotification record) {
         PaymentNotificationDto transferObject = new PaymentNotificationDto();
 
-        CustomerUserJpaDao sysUserDao = new CustomerUserJpaDao();
-        CurrencyJpaDao cDao = new CurrencyJpaDao();
-
         transferObject.id = record.getId();
-        transferObject.requestingUser = sysUserDao.mapToDto(record.getRequestingUser());
-        transferObject.payer = sysUserDao.mapToDto(record.getPayer());
+        transferObject.requestingUser = customerJpaDao.mapToDto(record.getRequestingUser());
+        transferObject.payer = customerJpaDao.mapToDto(record.getPayer());
         transferObject.amount = record.getAmount();
-        transferObject.currency = cDao.mapToDto(record.getCurrency());
+        transferObject.currency = currencyJpaDao.mapToDto(record.getCurrency());
         transferObject.description = record.getDescription();
         transferObject.status = record.getStatus();
         transferObject.notificationTimestamp = record.getNotificationTimestamp();
@@ -47,7 +55,18 @@ public class PaymentNotificationJpaDao extends JpaDao<PaymentNotification, Payme
 
     @Override
     protected PaymentNotification mapToRecord(PaymentNotificationDto transferObject) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PaymentNotification record = new PaymentNotification();
+
+        record.setId(transferObject.id);
+        record.setAmount(transferObject.amount);
+        record.setCurrency(currencyJpaDao.mapToRecord(transferObject.currency));
+        record.setDescription(transferObject.description);
+        record.setNotificationTimestamp(transferObject.notificationTimestamp);
+        record.setPayer(customerJpaDao.mapToRecord(transferObject.payer));
+        record.setRequestingUser(customerJpaDao.mapToRecord(transferObject.requestingUser));
+        record.setStatus(transferObject.status);
+
+        return record;
     }
 
     @Override
@@ -128,9 +147,10 @@ public class PaymentNotificationJpaDao extends JpaDao<PaymentNotification, Payme
     }
 
     /**
-     * 
+     *
      * @param id CustomerUser entity record id
-     * @return Optionally the payment requests this user received if the user exists
+     * @return Optionally the payment requests this user received if the user
+     * exists
      */
     @Override
     public Optional<List<PaymentNotificationDto>> getByPayerId(long id) {

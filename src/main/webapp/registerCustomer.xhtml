@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:metadata>
+        <f:viewParam name="redirectIfLoggedIn"/>
+        <f:event type="preRenderView" listener="#{registerCustomer.redirectIfLoggedIn}" />
+    </f:metadata>
+    <h:head>
+        <title>Open Payment System</title>
+    </h:head>
+    <h:body>
+        <div>
+            <h1>Register as a Customer</h1>
+            <h:form>
+                Username: <h:inputText value="#{registerCustomer.username}" size="20"/>
+                Email: <h:inputText id="email" value="#{registerCustomer.email}" size="20" validatorMessage="Email is invalid.">
+                    <f:validateRegex pattern="[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+" />
+                </h:inputText>
+                Password: <h:inputSecret value="#{registerCustomer.password}" size="20"/>
+                Choose a Currency: <h:selectOneMenu value="#{registerCustomer.currency}">
+                    <f:selectItem itemValue="eur" itemLabel="Euro" />
+                    <f:selectItem itemValue="gbp" itemLabel="Pound Sterling" />
+                    <f:selectItem itemValue="usd" itemLabel="US Dollar" />
+                </h:selectOneMenu>
+
+
+                <br/>
+                <h:commandButton value="Register" action="#{registerCustomer.register()}" type="submit"/>
+                <h:outputText rendered="#{registerCustomer.errorMessage}" value="#{registerCustomer.errorMessage}" />
+                <br/>
+                <h:link value="Or Login Instead" outcome="login" />
+            </h:form>
+        </div>
+    </h:body>
+</html>
+

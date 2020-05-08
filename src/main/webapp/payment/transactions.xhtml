@@ -1,0 +1,102 @@
+<ui:composition template="/templates/userTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:define name="content">
+        <div>
+            <h4>Balance:</h4>
+            <h:outputText value="#{transactions.currencySymbol} #{transactions.balance}"/>
+        </div>
+        <div>
+            <h4>Sent Transactions</h4>
+            <h:dataTable value = "#{transactions.transactionsSent}" var = "transaction">
+
+                <h:column>    				
+                    <f:facet name = "header">Timestamp</f:facet>    				
+                        #{transaction.timestamp}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">From</f:facet>
+                        #{transaction.fromUser.user.username}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">To</f:facet>
+                        #{transaction.toUser.user.username}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Description</f:facet>
+                        #{transaction.description}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Currency Sent</f:facet>
+                        #{transacton.sendCurrency.shortName}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Amount Sent</f:facet>
+                        #{transaction.sendAmount}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Currency Received</f:facet>
+                        #{transaction.recvCurrency}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Amount Received</f:facet>
+                        #{transaction.recvAmount}
+                </h:column>
+            </h:dataTable>
+        </div>
+        <div>
+            <h4>Received Transactions</h4>
+            <h:dataTable value = "#{transactions.transactionsReceived}" var = "transaction">
+
+                <h:column>    				
+                    <f:facet name = "header">Timestamp</f:facet>    				
+                        #{transaction.timestamp}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">From</f:facet>
+                        #{transaction.fromUser.user.username}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">To</f:facet>
+                        #{transaction.toUser.user.username}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Description</f:facet>
+                        #{transaction.description}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Currency Sent</f:facet>
+                        #{transacton.sendCurrency.shortName}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Amount Sent</f:facet>
+                        #{transaction.sendAmount}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Currency Received</f:facet>
+                        #{transaction.recvCurrency}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Amount Received</f:facet>
+                        #{transaction.recvAmount}
+                </h:column>
+            </h:dataTable>
+        </div>
+    </ui:define>
+</ui:composition>

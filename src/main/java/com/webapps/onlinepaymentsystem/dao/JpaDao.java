@@ -27,7 +27,7 @@ public abstract class JpaDao<T extends Serializable, S extends Dto> implements D
     
     private Class<T> entityClass;
     
-    @PersistenceContext
+    @PersistenceContext(unitName="WebappsPU")
     EntityManager entityManager;
 
     /**
@@ -107,6 +107,7 @@ public abstract class JpaDao<T extends Serializable, S extends Dto> implements D
     @Override
     public void create(S record) {
         entityManager.persist(this.mapToRecord(record));
+        entityManager.flush();
     }
 
     /**

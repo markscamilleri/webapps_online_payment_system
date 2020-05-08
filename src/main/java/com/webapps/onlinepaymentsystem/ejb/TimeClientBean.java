@@ -6,15 +6,13 @@
 package com.webapps.onlinepaymentsystem.ejb;
 
 import java.time.LocalDateTime;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
-import javax.enterprise.context.Dependent;
+import javax.ejb.Stateless;
 
 /**
  *
  * @author marks
  */
-@ApplicationScoped
+@Stateless
 public class TimeClientBean implements TimeClientService {
 
     /**

@@ -7,7 +7,12 @@ package com.webapps.onlinepaymentsystem.dao;
 
 import com.webapps.onlinepaymentsystem.dto.CustomerUserDto;
 import com.webapps.onlinepaymentsystem.entity.CustomerUser;
+import com.webapps.onlinepaymentsystem.entity.CustomerUser_;
+import com.webapps.onlinepaymentsystem.entity.SystemUser_;
 import java.util.Optional;
+import javax.ejb.Stateless;
+import javax.ejb.EJB;
+import javax.inject.Named;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -18,33 +23,36 @@ import javax.persistence.criteria.Root;
  *
  * @author marks
  */
+@Stateless
+@Named("CustomerUserDao")
 public class CustomerUserJpaDao extends JpaDao<CustomerUser, CustomerUserDto> implements CustomerUserDao {
 
+    @EJB
+    private UserJpaDao userDao;
+    
+    @EJB
+    private CurrencyJpaDao currencyDao;
+    
     @Override
     protected CustomerUserDto mapToDto(CustomerUser record) {
-        CurrencyJpaDao cDao = new CurrencyJpaDao();
-        UserJpaDao uDao = new UserJpaDao();
 
         CustomerUserDto transferObject = new CustomerUserDto();
         transferObject.id = record.getId();
-        transferObject.user = uDao.mapToDto(record.getUser());
+        transferObject.user = userDao.mapToDto(record.getUser());
         transferObject.balance = record.getBalance();
-        transferObject.currency = cDao.mapToDto(record.getCurrency());
+        transferObject.currency = currencyDao.mapToDto(record.getCurrency());
 
         return transferObject;
     }
 
     @Override
     protected CustomerUser mapToRecord(CustomerUserDto transferObject) {
-        CurrencyJpaDao cDao = new CurrencyJpaDao();
-        UserJpaDao uDao = new UserJpaDao();
-
         CustomerUser userRecord = new CustomerUser();
 
         userRecord.setId(transferObject.id);
-        userRecord.setUser(uDao.mapToRecord(transferObject.user));
+        userRecord.setUser(userDao.mapToRecord(transferObject.user));
         userRecord.setBalance(transferObject.balance);
-        userRecord.setCurrency(cDao.mapToRecord(transferObject.currency));
+        userRecord.setCurrency(currencyDao.mapToRecord(transferObject.currency));
 
         return userRecord;
     }
@@ -54,12 +62,12 @@ public class CustomerUserJpaDao extends JpaDao<CustomerUser, CustomerUserDto> im
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
 
-        Root CustomerUser = criteriaQuery.from(CustomerUser.class);
-        Join user = CustomerUser.join("user");
+        Root customerUser = criteriaQuery.from(CustomerUser.class);
+        Join user = customerUser.join(CustomerUser_.user);
 
         criteriaQuery.where(
                 criteriaBuilder.equal(
-                        user.get("username"),
+                        user.get(SystemUser_.username),
                         criteriaBuilder.parameter(String.class, "p_username")
                 )
         );
@@ -75,12 +83,12 @@ public class CustomerUserJpaDao extends JpaDao<CustomerUser, CustomerUserDto> im
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
 
-        Root CustomerUser = criteriaQuery.from(CustomerUser.class);
-        Join user = CustomerUser.join("user");
+        Root customerUser = criteriaQuery.from(CustomerUser.class);
+        Join user = customerUser.join(CustomerUser_.user);
 
         criteriaQuery.where(
                 criteriaBuilder.equal(
-                        user.get("email"),
+                        user.get(SystemUser_.email),
                         criteriaBuilder.parameter(String.class, "p_email")
                 )
         );

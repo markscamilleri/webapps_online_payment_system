@@ -8,7 +8,11 @@ package com.webapps.onlinepaymentsystem.dao;
 import com.webapps.onlinepaymentsystem.dto.UserGroupDto;
 import com.webapps.onlinepaymentsystem.entity.UserGroup;
 import java.util.Optional;
+import javax.ejb.Stateless;
+import javax.inject.Named;
 
+@Stateless
+@Named("userGroupDao")
 public class UserGroupJpaDao extends JpaDao<UserGroup, UserGroupDto> implements UserGroupDao {
 
     @Override

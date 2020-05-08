@@ -1,0 +1,29 @@
+<ui:composition
+    template="/resources/templates/layout.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <f:metadata>
+        <f:viewParam name="checkIfLoggedIn"/>
+        <f:event type="preRenderView" listener="#{authentication.checkIfLoggedIn}"/>
+    </f:metadata>
+
+    <ui:define name="title">Online Payment Admin</ui:define>
+    <ui:define name="header">
+        <div>
+            <span><h1>Online Payment System - Admin</h1></span>
+            <nav>
+                <ul style="list-style-type: none; display: inline-block;">
+                    <li><h:link value="All Transactions" outcome="adminTransactions"/></li>
+                    <li><h:link value="All Users" outcome="users"/></li>
+                    <li><h:link value="Register new Admin" outcome="registerAdmin"/></li>
+                    <li><h:link value="Logout" outcome="logout"/></li>
+                </ul>
+            </nav>
+        </div>
+    </ui:define>
+    <ui:define name="content">
+        <ui:insert name="content"/>
+    </ui:define>
+</ui:composition>

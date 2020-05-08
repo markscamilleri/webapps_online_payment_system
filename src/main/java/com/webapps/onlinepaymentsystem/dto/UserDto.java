@@ -17,4 +17,5 @@ public class UserDto extends Dto {
     public String encryptedPassword;
     public LocalDateTime registrationTimestamp;
     public LocalDateTime lastLogin;
+    public UserGroupDto userGroup;
 }

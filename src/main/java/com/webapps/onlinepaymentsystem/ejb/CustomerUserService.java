@@ -7,9 +7,10 @@
 package com.webapps.onlinepaymentsystem.ejb;
 
 import com.webapps.onlinepaymentsystem.dto.CustomerUserDto;
+import com.webapps.onlinepaymentsystem.exceptions.CurrencyNotFoundException;
+import com.webapps.onlinepaymentsystem.exceptions.RegistrationFailedException;
 import com.webapps.onlinepaymentsystem.exceptions.UserNotFoundException;
 import java.util.List;
-import java.util.Optional;
 
 /**
  *
@@ -25,4 +26,7 @@ public interface CustomerUserService {
 
     public CustomerUserDto getUserByEmail(String email) throws UserNotFoundException;
 
+    public void registerNewUser(String username, String email, String password, String chosenCurrencyShortName) throws RegistrationFailedException, CurrencyNotFoundException;
+    
+    public void addToBalance(CustomerUserDto user, float toAdd);
 }

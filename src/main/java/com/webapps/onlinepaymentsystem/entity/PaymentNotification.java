@@ -16,6 +16,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -31,7 +32,7 @@ public class PaymentNotification implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotNull
@@ -41,10 +42,12 @@ public class PaymentNotification implements Serializable {
 
     @NotNull
     @ManyToOne
+    @JoinColumn(name="requestingUserId")
     private CustomerUser requestingUser;
 
     @NotNull
     @ManyToOne
+    @JoinColumn(name="PayingUserId")
     private CustomerUser payer;
 
     @NotNull
@@ -56,6 +59,7 @@ public class PaymentNotification implements Serializable {
 
     @NotNull
     @ManyToOne
+    @JoinColumn(name="currencyId")
     private Currency currency;
 
     // TriState boolean, null means hasn't taken action yet.

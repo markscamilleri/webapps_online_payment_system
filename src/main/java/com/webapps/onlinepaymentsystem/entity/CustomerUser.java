@@ -13,6 +13,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -28,12 +29,13 @@ public class CustomerUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotNull
     @OneToOne
-    private User user;
+    @JoinColumn(name="userId")
+    private SystemUser user;
 
     @NotNull
     @DecimalMin("0.00")
@@ -44,10 +46,10 @@ public class CustomerUser implements Serializable {
     private Currency currency;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "fromUser")
-    private List<Transaction> transactionsOut;
+    private List<PaymentTransaction> transactionsOut;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "toUser")
-    private List<Transaction> transactionsIn;
+    private List<PaymentTransaction> transactionsIn;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestingUser")
     private List<PaymentNotification> notificationsSent;
@@ -63,11 +65,11 @@ public class CustomerUser implements Serializable {
         this.id = id;
     }
 
-    public User getUser() {
+    public SystemUser getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(SystemUser user) {
         this.user = user;
     }
 
@@ -87,19 +89,19 @@ public class CustomerUser implements Serializable {
         this.currency = currency;
     }
 
-    public List<Transaction> getTransactionsOut() {
+    public List<PaymentTransaction> getTransactionsOut() {
         return transactionsOut;
     }
 
-    public void setTransactionsOut(List<Transaction> transactionsOut) {
+    public void setTransactionsOut(List<PaymentTransaction> transactionsOut) {
         this.transactionsOut = transactionsOut;
     }
 
-    public List<Transaction> getTransactionsIn() {
+    public List<PaymentTransaction> getTransactionsIn() {
         return transactionsIn;
     }
 
-    public void setTransactionsIn(List<Transaction> transactionsIn) {
+    public void setTransactionsIn(List<PaymentTransaction> transactionsIn) {
         this.transactionsIn = transactionsIn;
     }
 

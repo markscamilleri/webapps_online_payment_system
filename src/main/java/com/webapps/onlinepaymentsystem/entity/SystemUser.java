@@ -13,7 +13,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -21,12 +23,13 @@ import javax.validation.constraints.NotNull;
  *
  */
 @Entity
-public class User implements Serializable {
+@Table(name="SystemUser")
+public class SystemUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     @NotNull
@@ -42,6 +45,7 @@ public class User implements Serializable {
     
     @NotNull
     @ManyToOne
+    @JoinColumn(name="userGroupId")
     private UserGroup userGroup;
 
     @NotNull
@@ -100,6 +104,14 @@ public class User implements Serializable {
         this.lastLogin = lastLogin;
     }
     
+    public UserGroup getUserGroup() {
+        return userGroup;
+    }
+
+    public void setUserGroup(UserGroup userGroup) {
+        this.userGroup = userGroup;
+    }
+   
     @Override
     public int hashCode() {
         int hash = 13;
@@ -123,7 +135,7 @@ public class User implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final User other = (User) obj;
+        final SystemUser other = (SystemUser) obj;
         if (!Objects.equals(this.username, other.username)) {
             return false;
         }

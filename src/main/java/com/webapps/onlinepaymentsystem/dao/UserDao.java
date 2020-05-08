@@ -6,6 +6,7 @@
 package com.webapps.onlinepaymentsystem.dao;
 
 import com.webapps.onlinepaymentsystem.dto.UserDto;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -17,4 +18,6 @@ public interface UserDao extends Dao<UserDto> {
     Optional<UserDto> getByUsername(String username);
 
     Optional<UserDto> getByEmail(String email);
+
+    List<UserDto> getByRoleName(String role);
 }

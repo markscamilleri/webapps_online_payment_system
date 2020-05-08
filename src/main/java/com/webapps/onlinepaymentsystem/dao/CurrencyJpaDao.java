@@ -8,11 +8,15 @@ package com.webapps.onlinepaymentsystem.dao;
 import com.webapps.onlinepaymentsystem.dto.CurrencyDto;
 import com.webapps.onlinepaymentsystem.entity.Currency;
 import java.util.Optional;
+import javax.ejb.Stateless;
+import javax.inject.Named;
 
 /**
  *
  * @author marks
  */
+@Stateless
+@Named("CurrencyJpaDao")
 public class CurrencyJpaDao extends JpaDao<Currency, CurrencyDto> implements CurrencyDao {
 
     @Override

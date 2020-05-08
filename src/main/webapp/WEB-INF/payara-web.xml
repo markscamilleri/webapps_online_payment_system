@@ -3,4 +3,12 @@
 <payara-web-app error-url="">
   <context-root>webapps2020</context-root>
   <class-loader delegate="true"/>
+  <security-role-mapping>
+    <role-name>user</role-name>
+    <group-name>user</group-name>
+  </security-role-mapping>
+  <security-role-mapping>
+    <role-name>admin</role-name>
+    <group-name>admin</group-name>
+  </security-role-mapping>
 </payara-web-app>

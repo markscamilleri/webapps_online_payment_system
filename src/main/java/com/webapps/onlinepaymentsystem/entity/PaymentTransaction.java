@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
@@ -22,12 +23,12 @@ import javax.validation.constraints.NotNull;
  * @author marks
  */
 @Entity
-public class Transaction implements Serializable {
+public class PaymentTransaction implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
     
     @NotNull
@@ -36,10 +37,12 @@ public class Transaction implements Serializable {
     
     @NotNull
     @ManyToOne
+    @JoinColumn(name="fromUserId")
     private CustomerUser fromUser;
     
     @NotNull
     @ManyToOne
+    @JoinColumn(name="toUserId")
     private CustomerUser toUser;
   
     @NotNull
@@ -51,6 +54,7 @@ public class Transaction implements Serializable {
    
     @NotNull
     @ManyToOne
+    @JoinColumn(name="currencyId")
     private Currency sendCurrency;
    
     @NotNull
@@ -159,7 +163,7 @@ public class Transaction implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Transaction other = (Transaction) obj;
+        final PaymentTransaction other = (PaymentTransaction) obj;
         if (!Objects.equals(this.id, other.id)) {
             return false;
         }

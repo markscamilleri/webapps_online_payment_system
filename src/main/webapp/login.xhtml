@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <f:metadata>
+        <f:viewParam name="redirectIfLoggedIn"/>
+        <f:event type="preRenderView" listener="#{loginCustomer.redirectIfLoggedIn}" />
+    </f:metadata>
+    <h:head>
+        <title>Open Payment System</title>
+    </h:head>
+    <h:body>
+        <div>
+            <h1>Login as a Customer</h1>
+            <h:form>
+                Username: <h:inputText value="#{loginCustomer.username}" size="20"/>
+                Password: <h:inputSecret value="#{loginCustomer.password}" size="20"/>
+                <br/>
+                <h:commandButton value="Submit" type="submit" action="#{loginCustomer.login}" />
+                <h:outputText rendered="#{loginCustomer.errorMessage}" value="#{loginCustomer.errorMessage}" />
+                <br/>
+                <h:link value="Or Register Instead" outcome="register" />
+            </h:form>
+        </div>
+    </h:body>
+</html>
+

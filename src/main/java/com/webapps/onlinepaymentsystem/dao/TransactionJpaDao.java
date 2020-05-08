@@ -6,13 +6,16 @@
 package com.webapps.onlinepaymentsystem.dao;
 
 import com.webapps.onlinepaymentsystem.dto.TransactionDto;
-import com.webapps.onlinepaymentsystem.entity.Transaction;
+import com.webapps.onlinepaymentsystem.entity.PaymentTransaction;
 import com.webapps.onlinepaymentsystem.entity.CustomerUser;
 import com.webapps.onlinepaymentsystem.enums.TimeCondition;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.inject.Named;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -22,14 +25,18 @@ import javax.persistence.criteria.Root;
 /**
  *
  */
-public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> implements TransactionDao {
+@Stateless
+@Named("transactionsDao")
+public class TransactionJpaDao extends JpaDao<PaymentTransaction, TransactionDto> implements TransactionDao {
+
+    @EJB
+    private CurrencyJpaDao currencyJpaDao;
 
     @Override
-    protected TransactionDto mapToDto(Transaction record) {
+    protected TransactionDto mapToDto(PaymentTransaction record) {
         TransactionDto transferObject = new TransactionDto();
 
         CustomerUserJpaDao sysUserDao = new CustomerUserJpaDao();
-        CurrencyJpaDao cDao = new CurrencyJpaDao();
 
         transferObject.id = record.getId();
         transferObject.description = record.getDescription();
@@ -37,9 +44,9 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
         transferObject.fromUser = sysUserDao.mapToDto(record.getFromUser());
         transferObject.toUser = sysUserDao.mapToDto(record.getToUser());
         transferObject.sendAmount = record.getSendAmount();
-        transferObject.sendCurrency = cDao.mapToDto(record.getSendCurrency());
+        transferObject.sendCurrency = currencyJpaDao.mapToDto(record.getSendCurrency());
         transferObject.recvAmount = record.getRecvAmount();
-        transferObject.recvCurrency = cDao.mapToDto(record.getRecvCurrency());
+        transferObject.recvCurrency = currencyJpaDao.mapToDto(record.getRecvCurrency());
 
         return transferObject;
     }
@@ -48,11 +55,10 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
     /**
      * Any changes to nested DTO classes are ignored
      */
-    protected Transaction mapToRecord(TransactionDto transferObject) {
-        Transaction record = new Transaction();
+    protected PaymentTransaction mapToRecord(TransactionDto transferObject) {
+        PaymentTransaction record = new PaymentTransaction();
 
         CustomerUserJpaDao sysUserDao = new CustomerUserJpaDao();
-        CurrencyJpaDao cDao = new CurrencyJpaDao();
 
         record.setId(transferObject.id);
         record.setDescription(transferObject.description);
@@ -60,9 +66,9 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
         record.setFromUser(sysUserDao.getRecordById(transferObject.fromUser.id).orElse(null));
         record.setToUser(sysUserDao.getRecordById(transferObject.toUser.id).orElse(null));
         record.setSendAmount(transferObject.sendAmount);
-        record.setSendCurrency(cDao.getRecordById(transferObject.sendCurrency.id).orElse(null));
+        record.setSendCurrency(currencyJpaDao.getRecordById(transferObject.sendCurrency.id).orElse(null));
         record.setRecvAmount(transferObject.recvAmount);
-        record.setRecvCurrency(cDao.getRecordById(transferObject.recvCurrency.id).orElse(null));
+        record.setRecvCurrency(currencyJpaDao.getRecordById(transferObject.recvCurrency.id).orElse(null));
 
         return record;
     }
@@ -72,7 +78,7 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
         CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
 
-        Root<Transaction> root = criteriaQuery.from(Transaction.class);
+        Root<PaymentTransaction> root = criteriaQuery.from(PaymentTransaction.class);
         Predicate condition;
 
         switch (when) {
@@ -111,7 +117,7 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
 
         criteriaQuery.where(condition);
 
-        TypedQuery<Transaction> query = this.entityManager.createQuery(criteriaQuery);
+        TypedQuery<PaymentTransaction> query = this.entityManager.createQuery(criteriaQuery);
         query.setParameter("p_timestamp", timestmap);
 
         return query.getResultStream()

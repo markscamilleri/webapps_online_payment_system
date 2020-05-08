@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
  *
  */
 public class PaymentNotificationDto extends Dto {
+    public long id;
     public LocalDateTime notificationTimestamp;
     public CustomerUserDto requestingUser;
     public CustomerUserDto payer;
