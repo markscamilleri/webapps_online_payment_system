@@ -1,0 +1,38 @@
+<ui:composition template="/templates/adminTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:define name="content">
+        <div>
+            <h4>Customer Users</h4>
+            <h:dataTable value = "#{adminCustomerUsers.users}" var = "user">
+
+                <h:column>    				
+                    <f:facet name = "header">Username</f:facet>    				
+                        #{user.user.username}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Email</f:facet>
+                        #{user.user.email}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Currency</f:facet>
+                        #{user.currency.shortName}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Balance</f:facet>
+                        #{user.balance}
+                </h:column>
+
+                <h:column>
+                    <f:facet name = "header">Registered</f:facet>
+                        #{user.user.registrationTimestamp}
+                </h:column>
+
+        </div>
+    </ui:define>
+</ui:composition>

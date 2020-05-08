@@ -18,6 +18,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.constraints.Pattern;
 
@@ -41,10 +42,10 @@ public class RegisterCustomerBean implements Serializable {
 
     private String errorMessage;
 
-    @EJB
+    @Inject
     CustomerUserService customerUserService;
 
-    @EJB
+    @Inject
     UserService userService;
 
     public String getUsername() {

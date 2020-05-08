@@ -11,6 +11,7 @@ import com.webapps.onlinepaymentsystem.exceptions.UserNotFoundException;
 import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.PostActivate;
 import javax.enterprise.context.RequestScoped;
@@ -22,6 +23,7 @@ import javax.inject.Named;
  * @author marks
  */
 @Named("payment")
+@RolesAllowed({"user"})
 @RequestScoped
 public class PaymentBean implements Serializable {
 
