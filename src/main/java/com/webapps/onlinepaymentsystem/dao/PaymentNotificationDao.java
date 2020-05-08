@@ -24,4 +24,6 @@ public interface PaymentNotificationDao extends Dao<PaymentNotificationDto> {
     Optional<List<PaymentNotificationDto>> getByRequestingUserId(long id);
     
     Optional<List<PaymentNotificationDto>> getByPayerId(long id);
+    
+    Optional<List<PaymentNotificationDto>> getUnreadByPayerId(long id);
 }

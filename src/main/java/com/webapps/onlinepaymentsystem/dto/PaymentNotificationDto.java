@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
  */
 public class PaymentNotificationDto extends Dto {
     public LocalDateTime notificationTimestamp;
-    public SystemUserDto requestingUser;
-    public SystemUserDto payer;
+    public CustomerUserDto requestingUser;
+    public CustomerUserDto payer;
     public String description;
     public float amount;
     public CurrencyDto currency;

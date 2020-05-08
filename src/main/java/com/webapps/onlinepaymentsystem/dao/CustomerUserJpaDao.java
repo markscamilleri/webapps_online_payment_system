@@ -5,8 +5,8 @@
  */
 package com.webapps.onlinepaymentsystem.dao;
 
-import com.webapps.onlinepaymentsystem.dto.SystemUserDto;
-import com.webapps.onlinepaymentsystem.entity.SystemUser;
+import com.webapps.onlinepaymentsystem.dto.CustomerUserDto;
+import com.webapps.onlinepaymentsystem.entity.CustomerUser;
 import java.util.Optional;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -18,14 +18,14 @@ import javax.persistence.criteria.Root;
  *
  * @author marks
  */
-public class SystemUserJpaDao extends JpaDao<SystemUser, SystemUserDto> implements SystemUserDao {
+public class CustomerUserJpaDao extends JpaDao<CustomerUser, CustomerUserDto> implements CustomerUserDao {
 
     @Override
-    protected SystemUserDto mapToDto(SystemUser record) {
+    protected CustomerUserDto mapToDto(CustomerUser record) {
         CurrencyJpaDao cDao = new CurrencyJpaDao();
         UserJpaDao uDao = new UserJpaDao();
 
-        SystemUserDto transferObject = new SystemUserDto();
+        CustomerUserDto transferObject = new CustomerUserDto();
         transferObject.id = record.getId();
         transferObject.user = uDao.mapToDto(record.getUser());
         transferObject.balance = record.getBalance();
@@ -35,11 +35,11 @@ public class SystemUserJpaDao extends JpaDao<SystemUser, SystemUserDto> implemen
     }
 
     @Override
-    protected SystemUser mapToRecord(SystemUserDto transferObject) {
+    protected CustomerUser mapToRecord(CustomerUserDto transferObject) {
         CurrencyJpaDao cDao = new CurrencyJpaDao();
         UserJpaDao uDao = new UserJpaDao();
 
-        SystemUser userRecord = new SystemUser();
+        CustomerUser userRecord = new CustomerUser();
 
         userRecord.setId(transferObject.id);
         userRecord.setUser(uDao.mapToRecord(transferObject.user));
@@ -50,12 +50,12 @@ public class SystemUserJpaDao extends JpaDao<SystemUser, SystemUserDto> implemen
     }
 
     @Override
-    public Optional<SystemUserDto> getByUsername(String username) {
+    public Optional<CustomerUserDto> getByUsername(String username) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
 
-        Root systemUser = criteriaQuery.from(SystemUser.class);
-        Join user = systemUser.join("user");
+        Root CustomerUser = criteriaQuery.from(CustomerUser.class);
+        Join user = CustomerUser.join("user");
 
         criteriaQuery.where(
                 criteriaBuilder.equal(
@@ -64,19 +64,19 @@ public class SystemUserJpaDao extends JpaDao<SystemUser, SystemUserDto> implemen
                 )
         );
 
-        TypedQuery<SystemUser> query = this.entityManager.createQuery(criteriaQuery);
+        TypedQuery<CustomerUser> query = this.entityManager.createQuery(criteriaQuery);
         query.setParameter("p_username", username);
 
         return query.getResultStream().findFirst().map(this::mapToDto);
     }
 
     @Override
-    public Optional<SystemUserDto> getByEmail(String email) {
+    public Optional<CustomerUserDto> getByEmail(String email) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery();
 
-        Root systemUser = criteriaQuery.from(SystemUser.class);
-        Join user = systemUser.join("user");
+        Root CustomerUser = criteriaQuery.from(CustomerUser.class);
+        Join user = CustomerUser.join("user");
 
         criteriaQuery.where(
                 criteriaBuilder.equal(
@@ -85,7 +85,7 @@ public class SystemUserJpaDao extends JpaDao<SystemUser, SystemUserDto> implemen
                 )
         );
 
-        TypedQuery<SystemUser> query = this.entityManager.createQuery(criteriaQuery);
+        TypedQuery<CustomerUser> query = this.entityManager.createQuery(criteriaQuery);
         query.setParameter("p_email", email);
 
         return query.getResultStream().findFirst().map(this::mapToDto);

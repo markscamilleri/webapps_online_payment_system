@@ -7,7 +7,7 @@ package com.webapps.onlinepaymentsystem.dao;
 
 import com.webapps.onlinepaymentsystem.dto.TransactionDto;
 import com.webapps.onlinepaymentsystem.entity.Transaction;
-import com.webapps.onlinepaymentsystem.entity.SystemUser;
+import com.webapps.onlinepaymentsystem.entity.CustomerUser;
 import com.webapps.onlinepaymentsystem.enums.TimeCondition;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,7 +28,7 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
     protected TransactionDto mapToDto(Transaction record) {
         TransactionDto transferObject = new TransactionDto();
 
-        SystemUserJpaDao sysUserDao = new SystemUserJpaDao();
+        CustomerUserJpaDao sysUserDao = new CustomerUserJpaDao();
         CurrencyJpaDao cDao = new CurrencyJpaDao();
 
         transferObject.id = record.getId();
@@ -51,7 +51,7 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
     protected Transaction mapToRecord(TransactionDto transferObject) {
         Transaction record = new Transaction();
 
-        SystemUserJpaDao sysUserDao = new SystemUserJpaDao();
+        CustomerUserJpaDao sysUserDao = new CustomerUserJpaDao();
         CurrencyJpaDao cDao = new CurrencyJpaDao();
 
         record.setId(transferObject.id);
@@ -122,7 +122,7 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
     @Override
     public Optional<List<TransactionDto>> getBySenderId(long id) {
         JpaDao uDao = new UserJpaDao();
-        Optional<SystemUser> user = uDao.getRecordById(id);
+        Optional<CustomerUser> user = uDao.getRecordById(id);
 
         return user.map(
                 presentUser -> presentUser.getTransactionsOut()
@@ -135,7 +135,7 @@ public class TransactionJpaDao extends JpaDao<Transaction, TransactionDto> imple
     @Override
     public Optional<List<TransactionDto>> getByReceiverId(long id) {
         JpaDao uDao = new UserJpaDao();
-        Optional<SystemUser> user = uDao.getRecordById(id);
+        Optional<CustomerUser> user = uDao.getRecordById(id);
 
         return user.map(
                 presentUser -> presentUser.getTransactionsIn()

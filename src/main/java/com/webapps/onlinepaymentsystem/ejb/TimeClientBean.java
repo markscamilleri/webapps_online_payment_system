@@ -14,7 +14,6 @@ import javax.enterprise.context.Dependent;
  *
  * @author marks
  */
-@Named(value = "timeClientBean")
 @ApplicationScoped
 public class TimeClientBean implements TimeClientService {
 
@@ -24,13 +23,14 @@ public class TimeClientBean implements TimeClientService {
     public TimeClientBean() {
     }
     
-    public LocalDateTime getTimeWithoutThrift(){
+    private LocalDateTime getTimeWithoutThrift(){
         return LocalDateTime.now();
     }
 
     @Override
     public LocalDateTime getTimeFromTimeServer() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        //TODO Get form thrift server
+        return getTimeWithoutThrift();
     }
     
 }

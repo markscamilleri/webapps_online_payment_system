@@ -7,7 +7,7 @@ package com.webapps.onlinepaymentsystem.dao;
 
 import com.webapps.onlinepaymentsystem.dto.PaymentNotificationDto;
 import com.webapps.onlinepaymentsystem.entity.PaymentNotification;
-import com.webapps.onlinepaymentsystem.entity.SystemUser;
+import com.webapps.onlinepaymentsystem.entity.CustomerUser;
 import com.webapps.onlinepaymentsystem.enums.PaymentNotificationStatus;
 import com.webapps.onlinepaymentsystem.enums.TimeCondition;
 import java.time.LocalDateTime;
@@ -30,7 +30,7 @@ public class PaymentNotificationJpaDao extends JpaDao<PaymentNotification, Payme
     protected PaymentNotificationDto mapToDto(PaymentNotification record) {
         PaymentNotificationDto transferObject = new PaymentNotificationDto();
 
-        SystemUserJpaDao sysUserDao = new SystemUserJpaDao();
+        CustomerUserJpaDao sysUserDao = new CustomerUserJpaDao();
         CurrencyJpaDao cDao = new CurrencyJpaDao();
 
         transferObject.id = record.getId();
@@ -110,14 +110,14 @@ public class PaymentNotificationJpaDao extends JpaDao<PaymentNotification, Payme
     }
 
     /**
-     * @param id SystemUser entity record id
+     * @param id CustomerUser entity record id
      * @return Optionally the payment requests this user made if the user exists
      * exists.
      */
     @Override
     public Optional<List<PaymentNotificationDto>> getByRequestingUserId(long id) {
         JpaDao uDao = new UserJpaDao();
-        Optional<SystemUser> user = uDao.getRecordById(id);
+        Optional<CustomerUser> user = uDao.getRecordById(id);
 
         return user.map(
                 presentUser -> presentUser.getNotificationsSent()
@@ -129,13 +129,26 @@ public class PaymentNotificationJpaDao extends JpaDao<PaymentNotification, Payme
 
     /**
      * 
-     * @param id SystemUser entity record id
+     * @param id CustomerUser entity record id
      * @return Optionally the payment requests this user received if the user exists
      */
     @Override
     public Optional<List<PaymentNotificationDto>> getByPayerId(long id) {
         JpaDao uDao = new UserJpaDao();
-        Optional<SystemUser> user = uDao.getRecordById(id);
+        Optional<CustomerUser> user = uDao.getRecordById(id);
+
+        return user.map(
+                presentUser -> presentUser.getNotificationsRecv()
+                        .stream()
+                        .map(this::mapToDto)
+                        .collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public Optional<List<PaymentNotificationDto>> getUnreadByPayerId(long id) {
+        JpaDao uDao = new UserJpaDao();
+        Optional<CustomerUser> user = uDao.getRecordById(id);
 
         return user.map(
                 presentUser -> presentUser.getNotificationsRecv()

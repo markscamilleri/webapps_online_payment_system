@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
  */
 public class TransactionDto extends Dto{
     public LocalDateTime timestamp;
-    public SystemUserDto fromUser;
-    public SystemUserDto toUser;
+    public CustomerUserDto fromUser;
+    public CustomerUserDto toUser;
     public String description;
     public float sendAmount;
     public CurrencyDto sendCurrency;

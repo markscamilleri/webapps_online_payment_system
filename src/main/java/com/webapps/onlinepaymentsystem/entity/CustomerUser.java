@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
  *
  */
 @Entity
-public class SystemUser implements Serializable {
+public class CustomerUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -140,7 +140,7 @@ public class SystemUser implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final SystemUser other = (SystemUser) obj;
+        final CustomerUser other = (CustomerUser) obj;
         if (Float.floatToIntBits(this.balance) != Float.floatToIntBits(other.balance)) {
             return false;
         }

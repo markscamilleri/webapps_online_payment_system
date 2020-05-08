@@ -36,11 +36,11 @@ public class Transaction implements Serializable {
     
     @NotNull
     @ManyToOne
-    private SystemUser fromUser;
+    private CustomerUser fromUser;
     
     @NotNull
     @ManyToOne
-    private SystemUser toUser;
+    private CustomerUser toUser;
   
     @NotNull
     private String description;
@@ -77,19 +77,19 @@ public class Transaction implements Serializable {
         this.txTimestamp = txTimestamp;
     }
 
-    public SystemUser getFromUser() {
+    public CustomerUser getFromUser() {
         return fromUser;
     }
 
-    public void setFromUser(SystemUser fromUser) {
+    public void setFromUser(CustomerUser fromUser) {
         this.fromUser = fromUser;
     }
 
-    public SystemUser getToUser() {
+    public CustomerUser getToUser() {
         return toUser;
     }
 
-    public void setToUser(SystemUser toUser) {
+    public void setToUser(CustomerUser toUser) {
         this.toUser = toUser;
     }
 

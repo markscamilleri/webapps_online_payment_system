@@ -41,11 +41,11 @@ public class PaymentNotification implements Serializable {
 
     @NotNull
     @ManyToOne
-    private SystemUser requestingUser;
+    private CustomerUser requestingUser;
 
     @NotNull
     @ManyToOne
-    private SystemUser payer;
+    private CustomerUser payer;
 
     @NotNull
     private String description;
@@ -79,19 +79,19 @@ public class PaymentNotification implements Serializable {
         this.notificationTimestamp = timestamp;
     }
 
-    public SystemUser getRequestingUser() {
+    public CustomerUser getRequestingUser() {
         return requestingUser;
     }
 
-    public void setRequestingUser(SystemUser requestingUser) {
+    public void setRequestingUser(CustomerUser requestingUser) {
         this.requestingUser = requestingUser;
     }
 
-    public SystemUser getPayer() {
+    public CustomerUser getPayer() {
         return payer;
     }
 
-    public void setPayer(SystemUser payer) {
+    public void setPayer(CustomerUser payer) {
         this.payer = payer;
     }
 

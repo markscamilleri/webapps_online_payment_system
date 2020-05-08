@@ -7,7 +7,6 @@ package com.webapps.onlinepaymentsystem.dao;
 
 import com.webapps.onlinepaymentsystem.dto.UserGroupDto;
 import com.webapps.onlinepaymentsystem.entity.UserGroup;
-import java.util.List;
 import java.util.Optional;
 
 public class UserGroupJpaDao extends JpaDao<UserGroup, UserGroupDto> implements UserGroupDao {

@@ -6,21 +6,24 @@
 package com.webapps.onlinepaymentsystem.ejb;
 
 import com.webapps.onlinepaymentsystem.dao.CurrencyDao;
-import com.webapps.onlinepaymentsystem.dao.CurrencyJpaDao;
 import com.webapps.onlinepaymentsystem.dto.CurrencyDto;
 import java.util.List;
 import java.util.Optional;
-import javax.enterprise.context.ApplicationScoped;
+import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
 /**
  *
  * @author marks
  */
-@ApplicationScoped
-public class CurrencyServiceBean implements CurrencyService {
-    
-    private CurrencyDao cDao = new CurrencyJpaDao();
-    
+@Stateless
+@RolesAllowed({"admin", "user"})
+public class CurrencyBean implements CurrencyService {
+
+    @EJB
+    private CurrencyDao cDao;
+
     @Override
     public List<CurrencyDto> getAllCurrencies() {
         return cDao.getAll();

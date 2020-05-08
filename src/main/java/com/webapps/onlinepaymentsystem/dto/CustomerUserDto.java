@@ -9,7 +9,7 @@ package com.webapps.onlinepaymentsystem.dto;
  *
  * @author marks
  */
-public class SystemUserDto extends Dto {
+public class CustomerUserDto extends Dto {
     public UserDto user;
     public float balance;
     public CurrencyDto currency;

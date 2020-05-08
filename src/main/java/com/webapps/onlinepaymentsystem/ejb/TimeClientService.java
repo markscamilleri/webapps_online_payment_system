@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
  *
  * @author marks
  */
-public interface TimeClientService {
-    LocalDateTime getTimeWithoutThrift();
-    
+public interface TimeClientService {   
     LocalDateTime getTimeFromTimeServer();
 }
