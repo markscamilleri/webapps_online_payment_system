@@ -1,0 +1,23 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: daily
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.eclipse.persistence:org.eclipse.persistence.asm
+    versions:
+    - 3.0.0
+  - dependency-name: org.eclipse.persistence:org.eclipse.persistence.jpa
+    versions:
+    - 3.0.0
+  - dependency-name: org.eclipse.persistence:org.eclipse.persistence.core
+    versions:
+    - 3.0.0
+  - dependency-name: org.eclipse.persistence:org.eclipse.persistence.jpa.jpql
+    versions:
+    - 3.0.0
+  - dependency-name: org.eclipse.persistence:org.eclipse.persistence.jpa.modelgen.processor
+    versions:
+    - 3.0.0
